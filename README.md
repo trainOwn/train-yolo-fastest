@@ -19,7 +19,7 @@
   python test.py --data .\mnist_data\mnist.data --weights .\weights\mnist_detect-70-epoch-0.965800ap-model.pth --img .\mnist_data\images\val_000000.jpg
   ```
 <div align=center>
-<img src="https://github.com/dog-qiuqiu/Yolo-FastestV2/blob/main/img/000139_result.png"> />
+<img src="test_result.png"> />
 </div>
 
 ## How to train
