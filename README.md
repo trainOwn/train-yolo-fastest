@@ -1,5 +1,4 @@
-# ***FastestDet: it has higher accuracy and faster speed than Yolo-fastest https://github.com/dog-qiuqiu/FastestDet***
-# :zap:Yolo-FastestV2:zap:[![DOI](https://zenodo.org/badge/386585431.svg)](https://zenodo.org/badge/latestdoi/386585431)
+# :zap:Yolo-FastestV2:zap:
 ![image](https://github.com/dog-qiuqiu/Yolo-FastestV2/blob/main/img/demo.png)
 
 # Improvement
@@ -105,7 +104,7 @@
   0.8                                                                            # iou
   ```
 ### Build the training .data configuration file
-* Reference./mnist_data/mnist.data
+* Reference ./mnist_data/mnist.data
   ```
   [name]
   model_name=mnist_detect
