@@ -1,19 +1,7 @@
 # ***FastestDet: it has higher accuracy and faster speed than Yolo-fastest https://github.com/dog-qiuqiu/FastestDet***
 # :zap:Yolo-FastestV2:zap:[![DOI](https://zenodo.org/badge/386585431.svg)](https://zenodo.org/badge/latestdoi/386585431)
 ![image](https://github.com/dog-qiuqiu/Yolo-FastestV2/blob/main/img/demo.png)
-* ***Simple, fast, compact, easy to transplant***
-* ***Less resource occupation, excellent single-core performance, lower power consumption***
-* ***Faster and smaller:Trade 0.3% loss of accuracy for 30% increase in inference speed, reducing the amount of parameters by 25%***
-* ***Fast training speed, low computing power requirements, training only requires 3GB video memory, gtx1660ti training COCO 1 epoch only takes 4 minutes***
-* ***算法介绍：https://zhuanlan.zhihu.com/p/400474142 交流qq群:1062122604***
-# Evaluating indicator/Benchmark
-Network|COCO mAP(0.5)|Resolution|Run Time(4xCore)|Run Time(1xCore)|FLOPs(G)|Params(M)
-:---:|:---:|:---:|:---:|:---:|:---:|:---:
-[Yolo-FastestV2](https://github.com/dog-qiuqiu/Yolo-FastestV2/tree/main/modelzoo)|24.10 %|352X352|3.29 ms|5.37 ms|0.212|0.25M
-[Yolo-FastestV1.1](https://github.com/dog-qiuqiu/Yolo-Fastest/tree/master/ModelZoo/yolo-fastest-1.1_coco)|24.40 %|320X320|4.23 ms|7.54 ms|0.252|0.35M
-[Yolov4-Tiny](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov4-tiny.cfg)|40.2%|416X416|26.00ms|55.44ms|6.9|5.77M
 
-* ***Test platform Mate 30 Kirin 990 CPU，Based on [NCNN](https://github.com/Tencent/ncnn)***
 # Improvement
 * Different loss weights for different scale output layers
 * The backbone is replaced with a more lightweight shufflenetV2
@@ -28,7 +16,7 @@ Network|COCO mAP(0.5)|Resolution|Run Time(4xCore)|Run Time(1xCore)|FLOPs(G)|Para
 ## Test
 * Picture test
   ```
-  python3 test.py --data data/coco.data --weights modelzoo/coco2017-0.241078ap-model.pth --img img/000139.jpg
+  python test.py --data .\mnist_data\mnist.data --weights .\weights\mnist_detect-70-epoch-0.965800ap-model.pth --img .\mnist_data\images\val_000000.jpg
   ```
 <div align=center>
 <img src="https://github.com/dog-qiuqiu/Yolo-FastestV2/blob/main/img/000139_result.png"> />
@@ -109,54 +97,54 @@ Network|COCO mAP(0.5)|Resolution|Run Time(4xCore)|Run Time(1xCore)|FLOPs(G)|Para
 ### Get anchor bias
 * Generate anchor based on current dataset
   ```
-  python3 genanchors.py --traintxt ./train.txt
+  python3 genanchors.py --traintxt ./mnist_data/train.txt
   ```
 * The anchors6.txt file will be generated in the current directory,the sample content of the anchors6.txt is as follows:
   ```
-  12.64,19.39, 37.88,51.48, 55.71,138.31, 126.91,78.23, 131.57,214.55, 279.92,258.87  # anchor bias
-  0.636158                                                                             # iou
+  10.63,17.67, 11.63,23.94, 15.35,17.96, 17.37,25.09, 20.76,20.40, 24.26,26.49
+  0.8                                                                            # iou
   ```
 ### Build the training .data configuration file
-* Reference./data/coco.data
+* Reference./mnist_data/mnist.data
   ```
   [name]
-  model_name=coco           # model name
+  model_name=mnist_detect
 
   [train-configure]
-  epochs=300                # train epichs
-  steps=150,250             # Declining learning rate steps
-  batch_size=64             # batch size
-  subdivisions=1            # Same as the subdivisions of the darknet cfg file
-  learning_rate=0.001       # learning rate
+  epochs=500
+  steps=120,240
+  batch_size=64
+  subdivisions=2
+  learning_rate=0.0003
+
 
   [model-configure]
-  pre_weights=None          # The path to load the model, if it is none, then restart the training
-  classes=80                # Number of detection categories
-  width=352                 # The width of the model input image
-  height=352                # The height of the model input image
-  anchor_num=3              # anchor num
-  anchors=12.64,19.39, 37.88,51.48, 55.71,138.31, 126.91,78.23, 131.57,214.55, 279.92,258.87 #anchor bias
+  classes=10
+  width=352
+  height=352
+  anchor_num=3
+  anchors=10.63,17.67, 11.63,23.94, 15.35,17.96, 17.37,25.09, 20.76,20.40, 24.26,26.49
 
   [data-configure]
-  train=/media/qiuqiu/D/coco/train2017.txt   # train dataset path .txt file
-  val=/media/qiuqiu/D/coco/val2017.txt       # val dataset path .txt file 
-  names=./data/coco.names                    # .names category label file
+  train=./mnist_data/train.txt
+  val=./mnist_data/val.txt
+  names=./mnist_data/mnist.names
   ```
 ### Train
 * Perform training tasks
   ```
-  python3 train.py --data data/coco.data
+  python3 train.py --data mnist_data/mnist.data
   ```
 ### Evaluation
 * Calculate map evaluation
   ```
-  python3 evaluation.py --data data/coco.data --weights modelzoo/coco2017-0.241078ap-model.pth
+  python3 evaluation.py --data mnist_data/mnist.data --weights .\weights\mnist_detect-70-epoch-0.965800ap-model.pth
   ```
 # Deploy
 ## NCNN
 * Convert onnx
   ```
-  python3 pytorch2onnx.py --data data/coco.data --weights modelzoo/coco2017-0.241078ap-model.pth --output yolo-fastestv2.onnx
+  python3 pytorch2onnx.py --data data/coco.data --weights .\weights\mnist_detect-70-epoch-0.965800ap-model.pth --output yolo-fastestv2.onnx
   ```
 * onnx-sim
   ```
