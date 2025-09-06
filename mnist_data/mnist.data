@@ -17,6 +17,6 @@ anchor_num=3
 anchors=10.63,17.67, 11.63,23.94, 15.35,17.96, 17.37,25.09, 20.76,20.40, 24.26,26.49
 
 [data-configure]
-train=./mnist_data_2/train.txt
-val=./mnist_data_2/val.txt
-names=./mnist_data_2/mnist.names
+train=./mnist_data/train.txt
+val=./mnist_data/val.txt
+names=./mnist_data/mnist.names
