@@ -2,7 +2,7 @@
 model_name=mnist_detect
 
 [train-configure]
-epochs=500
+epochs=1
 steps=120,240
 batch_size=64
 subdivisions=2
